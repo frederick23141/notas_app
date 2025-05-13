@@ -1,29 +1,37 @@
-/*import 'package:equatable/equatable.dart';
-
-class NoteEntity extends Equatable {
-  final int? id;
-  final String title;
-  final String content;
-
-  const NoteEntity({this.id, required this.title, required this.content});
-
-  @override
-  List<Object?> get props => [id, title, content];
-}
-*/
+/// Entidad que representa una nota.
+///
+/// Esta clase modela la estructura de una nota en la aplicación,
+/// y se utiliza tanto para la lógica de negocio como para la persistencia
+/// de datos en la base de datos local.
 class NoteEntity {
+  /// Identificador único de la nota. Puede ser nulo cuando se crea una nueva nota.
   final int? id;
+
+  /// Título de la nota.
   final String title;
+
+  /// Contenido o cuerpo de la nota.
   final String content;
 
+  /// Constructor de la entidad [NoteEntity].
+  ///
+  /// [id] es opcional, ya que una nueva nota puede no tener aún un ID asignado.
+  /// [title] y [content] son requeridos.
   NoteEntity({this.id, required this.title, required this.content});
 
-  // Convertir la nota en un Map para guardar en la base de datos
+  /// Convierte la instancia de [NoteEntity] en un mapa de clave-valor ([Map<String, dynamic>]),
+  /// para ser almacenado en la base de datos.
+  ///
+  /// Esto permite insertar o actualizar la nota en una base de datos SQLite.
   Map<String, dynamic> toMap() {
     return {'id': id, 'title': title, 'content': content};
   }
 
-  // Convertir un Map de la base de datos a una instancia de Note
+  /// Crea una nueva instancia de [NoteEntity] a partir de un mapa
+  /// de una consulta a la base de datos.
+  ///
+  /// Este método es útil para convertir los resultados obtenidos de SQLite
+  /// en objetos manejables dentro de la aplicación.
   factory NoteEntity.fromMap(Map<String, dynamic> map) {
     return NoteEntity(
       id: map['id'],

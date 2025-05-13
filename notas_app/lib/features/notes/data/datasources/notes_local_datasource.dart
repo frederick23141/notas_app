@@ -1,85 +1,19 @@
-/*import 'package:sqflite/sqflite.dart';
-import 'package:path/path.dart';
-import '../../domain/entities/note_entity.dart';
-
-class NotesLocalDataSource {
-  static final NotesLocalDataSource _instance =
-      NotesLocalDataSource._internal();
-
-  factory NotesLocalDataSource() => _instance;
-
-  NotesLocalDataSource._internal();
-
-  Database? _db;
-
-  Future<Database> get db async {
-    if (_db != null) return _db!;
-    _db = await _initDb();
-    return _db!;
-  }
-
-  Future<Database> _initDb() async {
-    final path = join(await getDatabasesPath(), 'notes.db');
-    return await openDatabase(
-      path,
-      version: 1,
-      onCreate: (db, version) {
-        return db.execute('''
-          CREATE TABLE notes (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            title TEXT NOT NULL,
-            content TEXT NOT NULL
-          )
-        ''');
-      },
-    );
-  }
-
-  Future<List<NoteEntity>> getNotes() async {
-    final dbClient = await db;
-    final maps = await dbClient.query('notes');
-    return maps
-        .map(
-          (e) => NoteEntity(
-            id: e['id'] as int,
-            title: e['title'] as String,
-            content: e['content'] as String,
-          ),
-        )
-        .toList();
-  }
-
-  Future<void> insertNote(NoteEntity note) async {
-    final dbClient = await db;
-    await dbClient.insert('notes', {
-      'title': note.title,
-      'content': note.content,
-    });
-  }
-
-  Future<void> updateNote(NoteEntity note) async {
-    final dbClient = await db;
-    await dbClient.update(
-      'notes',
-      {'title': note.title, 'content': note.content},
-      where: 'id = ?',
-      whereArgs: [note.id],
-    );
-  }
-
-  Future<void> deleteNote(int id) async {
-    final dbClient = await db;
-    await dbClient.delete('notes', where: 'id = ?', whereArgs: [id]);
-  }
-}
-*/
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 import 'package:notas_app/features/notes/domain/entities/note_entity.dart';
 
+/// Repositorio local de notas utilizando SQLite.
+///
+/// Esta clase proporciona métodos para interactuar con la base de datos local SQLite
+/// para realizar operaciones CRUD (Crear, Leer, Actualizar y Eliminar) sobre las notas.
+/// Los datos de las notas se almacenan en una base de datos SQLite llamada "notes.db".
 class NotesLocalDataSource {
   static Database? _database;
 
+  /// Obtiene una instancia de la base de datos. Si la base de datos no existe, se crea.
+  ///
+  /// Utiliza una base de datos singleton para garantizar que solo exista una instancia
+  /// de la base de datos durante la vida útil de la aplicación.
   // Inicializa la base de datos
   Future<Database> get database async {
     if (_database != null) return _database!;
@@ -89,7 +23,11 @@ class NotesLocalDataSource {
     return _database!;
   }
 
-  // Crea o abre la base de datos
+  /// Inicializa la base de datos y crea la tabla 'notes' si no existe.
+  ///
+  /// Si la base de datos no existe, se crea y se establece la estructura de las tablas.
+  ///
+  /// Devuelve una instancia de [Database] una vez que se ha abierto o creado la base de datos.
   Future<Database> _initDB() async {
     final path = await getDatabasesPath();
     return openDatabase(
@@ -108,7 +46,12 @@ class NotesLocalDataSource {
     );
   }
 
-  // Guarda una nueva nota en la base de datos
+  /// Guarda una nueva nota en la base de datos.
+  ///
+  /// Inserta una nueva nota en la tabla 'notes'. Si la nota ya existe, se reemplaza.
+  ///
+  /// Parámetro:
+  /// - [note]: La nota a guardar, que debe ser una instancia de [NoteEntity].
   Future<void> saveNote(NoteEntity note) async {
     final db = await database;
     await db.insert(
@@ -118,7 +61,12 @@ class NotesLocalDataSource {
     );
   }
 
-  // Obtiene todas las notas
+  /// Obtiene todas las notas almacenadas en la base de datos.
+  ///
+  /// Consulta la tabla 'notes' y devuelve una lista de objetos [NoteEntity].
+  ///
+  /// Devuelve:
+  /// - Una lista de [NoteEntity] que contiene todas las notas almacenadas.
   Future<List<NoteEntity>> getNotes() async {
     final db = await database;
     final List<Map<String, dynamic>> maps = await db.query('notes');
@@ -128,7 +76,12 @@ class NotesLocalDataSource {
     });
   }
 
-  // Actualiza una nota
+  /// Actualiza una nota existente en la base de datos.
+  ///
+  /// Modifica los valores de la nota en la base de datos utilizando el ID como referencia.
+  ///
+  /// Parámetro:
+  /// - [note]: La nota que se va a actualizar, debe ser una instancia de [NoteEntity].
   Future<void> updateNote(NoteEntity note) async {
     final db = await database;
     await db.update(
@@ -139,7 +92,12 @@ class NotesLocalDataSource {
     );
   }
 
-  // Elimina una nota
+  /// Elimina una nota de la base de datos.
+  ///
+  /// Elimina la nota de la tabla 'notes' según el ID de la misma.
+  ///
+  /// Parámetro:
+  /// - [id]: El ID de la nota que se desea eliminar.
   Future<void> deleteNote(int id) async {
     final db = await database;
     await db.delete('notes', where: 'id = ?', whereArgs: [id]);
