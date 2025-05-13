@@ -81,9 +81,9 @@ class _NoteFormPageState extends State<NoteFormPage> {
                       content: _contentController.text,
                     );
                     if (widget.isEditMode) {
-                      context.read<NoteBloc>().add(UpdateNoteEvent(note));
+                      context.read<NoteBloc>().add(UpdateNote(note));
                     } else {
-                      context.read<NoteBloc>().add(AddNoteEvent(note));
+                      context.read<NoteBloc>().add(AddNote(note));
                     }
                     Navigator.pop(context);
                   }
