@@ -3,19 +3,27 @@ import '../../domain/entities/note_entity.dart';
 import '../../domain/repositories/notes_repository.dart';
 
 class NotesRepositoryImpl implements NotesRepository {
-  final NotesLocalDataSource dataSource;
+  final NotesLocalDataSource localDataSource;
 
-  NotesRepositoryImpl(this.dataSource);
-
-  @override
-  Future<void> addNote(NoteEntity note) => dataSource.insertNote(note);
+  NotesRepositoryImpl(this.localDataSource);
 
   @override
-  Future<void> deleteNote(int id) => dataSource.deleteNote(id);
+  Future<List<NoteEntity>> getNotes() async {
+    return await localDataSource.getNotes();
+  }
 
   @override
-  Future<List<NoteEntity>> getNotes() => dataSource.getNotes();
+  Future<void> addNote(NoteEntity note) async {
+    await localDataSource.saveNote(note);
+  }
 
   @override
-  Future<void> updateNote(NoteEntity note) => dataSource.updateNote(note);
+  Future<void> updateNote(NoteEntity note) async {
+    await localDataSource.updateNote(note);
+  }
+
+  @override
+  Future<void> deleteNote(int id) async {
+    await localDataSource.deleteNote(id);
+  }
 }

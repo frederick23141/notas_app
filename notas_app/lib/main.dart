@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+/*import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:notas_app/features/auth/data/datasources/auth_local_datasource.dart';
 import 'package:notas_app/features/auth/data/datasources/repositories/auth_repository_impl.dart';
@@ -67,6 +67,35 @@ class MyApp extends StatelessWidget {
           },
         ),
       ),
+    );
+  }
+}
+*/
+// lib/main.dart
+import 'package:flutter/material.dart';
+import 'package:notas_app/features/notes/presentation/pages/notes_list_page.dart';
+import 'package:notas_app/features/notes/presentation/pages/note_form_page.dart';
+import 'package:notas_app/features/auth/presentation/pages/login_page.dart';
+import 'package:notas_app/features/auth/presentation/pages/home_page.dart';
+
+void main() {
+  runApp(const MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Notas App',
+      routes: {
+        '/login': (_) => const LoginPage(),
+        '/home': (_) => const HomePage(),
+        '/notes': (_) => const NotesListPage(),
+        '/note-form': (_) => const NoteFormPage(isEditMode: false),
+      },
+      home: const HomePage(),
     );
   }
 }
