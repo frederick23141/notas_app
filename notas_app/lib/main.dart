@@ -1,33 +1,58 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:notas_app/features/auth/data/datasources/auth_local_datasource.dart';
 import 'package:notas_app/features/auth/data/datasources/repositories/auth_repository_impl.dart';
+import 'package:notas_app/features/auth/presentation/bloc/auth_bloc.dart';
+import 'package:notas_app/features/auth/presentation/bloc/auth_event.dart';
 import 'package:notas_app/features/auth/presentation/bloc/auth_state.dart';
-import 'features/auth/data/datasources/auth_local_datasource.dart';
-import 'features/auth/domain/repositories/auth_repository.dart';
-import 'features/auth/presentation/bloc/auth_bloc.dart';
-import 'features/auth/presentation/bloc/auth_event.dart';
-import 'features/auth/presentation/pages/login_page.dart';
-import 'features/auth/presentation/pages/home_page.dart';
+import 'package:notas_app/features/auth/presentation/pages/home_page.dart';
+import 'package:notas_app/features/auth/presentation/pages/login_page.dart';
+import 'package:notas_app/features/notes/domain/repositories/notes_repository_impl.dart';
+import 'package:notas_app/features/notes/presentation/bloc/note_event.dart';
+import 'features/notes/data/datasources/notes_local_datasource.dart';
+import 'features/notes/domain/repositories/notes_repository.dart';
+import 'features/notes/domain/usecases/get_notes.dart' as usecase;
+import 'features/notes/domain/usecases/add_note.dart' as usecase;
+import 'features/notes/domain/usecases/update_note.dart' as usecase;
+import 'features/notes/domain/usecases/delete_note.dart' as usecase;
+import 'features/notes/presentation/bloc/note_bloc.dart';
 
 void main() {
-  final localDataSource = AuthLocalDataSource();
-  final AuthRepository repository = AuthRepositoryImpl(localDataSource);
+  final notesLocalDataSource = NotesLocalDataSource();
+  final NotesRepository notesRepository = NotesRepositoryImpl(
+    notesLocalDataSource,
+  );
 
-  runApp(MyApp(repository: repository));
+  runApp(MyApp(notesRepository: notesRepository));
 }
 
 class MyApp extends StatelessWidget {
-  final AuthRepository repository;
+  final NotesRepository notesRepository;
 
-  const MyApp({super.key, required this.repository});
+  const MyApp({super.key, required this.notesRepository});
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) => AuthBloc(repository)..add(AppStarted()),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create:
+              (_) =>
+                  AuthBloc(AuthRepositoryImpl(AuthLocalDataSource()))
+                    ..add(AppStarted()),
+        ),
+        BlocProvider(
+          create:
+              (_) => NoteBloc(
+                getNotes: usecase.GetNotes(notesRepository),
+                addNote: usecase.AddNote(notesRepository),
+                updateNote: usecase.UpdateNote(notesRepository),
+                deleteNote: usecase.DeleteNote(notesRepository),
+              )..add(LoadNotes()),
+        ),
+      ],
       child: MaterialApp(
         title: 'Notas App',
-        debugShowCheckedModeBanner: false,
         routes: {
           '/login': (_) => const LoginPage(),
           '/home': (_) => const HomePage(),
@@ -36,12 +61,8 @@ class MyApp extends StatelessWidget {
           builder: (context, state) {
             if (state is Authenticated) {
               return const HomePage();
-            } else if (state is Unauthenticated) {
-              return const LoginPage();
             } else {
-              return const Scaffold(
-                body: Center(child: CircularProgressIndicator()),
-              );
+              return const LoginPage();
             }
           },
         ),
