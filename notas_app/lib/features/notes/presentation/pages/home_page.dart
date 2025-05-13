@@ -19,6 +19,7 @@ class HomePage extends StatelessWidget {
             body: Center(child: CircularProgressIndicator()),
           );
         } else if (state is NoteLoaded) {
+          print("Notas cargadas: ${state.notes.length}");
           final notes = state.notes;
 
           return Scaffold(
@@ -34,24 +35,26 @@ class HomePage extends StatelessWidget {
                 ),
               ],
             ),
-            body: ListView.builder(
-              itemCount: notes.length,
-              itemBuilder: (context, index) {
-                final note = notes[index];
-                return ListTile(
-                  title: Text(note.title),
-                  subtitle: Text(note.content),
-                  trailing: IconButton(
-                    icon: const Icon(Icons.delete),
-                    onPressed: () {
-                      context.read<NoteBloc>().add(DeleteNote(note.id!));
+            body: SafeArea(
+              child: ListView.builder(
+                itemCount: notes.length,
+                itemBuilder: (context, index) {
+                  final note = notes[index];
+                  return ListTile(
+                    title: Text(note.title),
+                    subtitle: Text(note.content),
+                    trailing: IconButton(
+                      icon: const Icon(Icons.delete),
+                      onPressed: () {
+                        context.read<NoteBloc>().add(DeleteNote(note.id!));
+                      },
+                    ),
+                    onTap: () {
+                      // Agregar funcionalidad para editar nota
                     },
-                  ),
-                  onTap: () {
-                    // Agregar funcionalidad para editar nota
-                  },
-                );
-              },
+                  );
+                },
+              ),
             ),
             floatingActionButton: FloatingActionButton(
               onPressed: () {
@@ -82,6 +85,7 @@ class HomePage extends StatelessWidget {
         return AlertDialog(
           title: const Text('Agregar Nota'),
           content: Column(
+            mainAxisSize: MainAxisSize.min,
             children: [
               TextField(
                 controller: titleController,

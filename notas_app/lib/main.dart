@@ -110,8 +110,12 @@ import 'package:notas_app/features/auth/data/datasources/auth_local_datasource.d
 import 'package:notas_app/features/auth/data/datasources/repositories/auth_repository_impl.dart';
 import 'package:notas_app/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:notas_app/features/auth/presentation/bloc/auth_event.dart';
+import 'package:notas_app/features/auth/presentation/bloc/auth_state.dart';
 import 'package:notas_app/features/auth/presentation/pages/login_page.dart';
-import 'package:notas_app/features/auth/presentation/pages/home_page.dart';
+
+//import 'package:notas_app/features/auth/presentation/pages/home_page.dart';
+import 'package:notas_app/features/notes/presentation/pages/home_page.dart';
+
 import 'package:notas_app/features/notes/domain/repositories/notes_repository_impl.dart';
 import 'package:notas_app/features/notes/presentation/bloc/note_bloc.dart';
 import 'package:notas_app/features/notes/presentation/bloc/note_event.dart';
@@ -152,13 +156,26 @@ class MyApp extends StatelessWidget {
       ],
       child: MaterialApp(
         title: 'Notas App',
+        debugShowCheckedModeBanner: false,
         routes: {
           '/login': (_) => const LoginPage(),
           '/home': (_) => const HomePage(),
           '/notes': (_) => const NotesListPage(),
           '/note-form': (_) => const NoteFormPage(isEditMode: false),
         },
-        home: const HomePage(),
+        home: BlocBuilder<AuthBloc, AuthState>(
+          builder: (context, state) {
+            if (state is AuthLoading) {
+              return const Scaffold(
+                body: Center(child: CircularProgressIndicator()),
+              );
+            } else if (state is Authenticated) {
+              return const HomePage();
+            } else {
+              return const LoginPage();
+            }
+          },
+        ),
       ),
     );
   }
