@@ -172,6 +172,7 @@ class HomePage extends StatelessWidget {
                 final note = NoteEntity(
                   title: titleController.text,
                   content: contentController.text,
+                  date: DateTime.now(),
                 );
                 context.read<NoteBloc>().add(AddNote(note));
                 Navigator.pop(context);

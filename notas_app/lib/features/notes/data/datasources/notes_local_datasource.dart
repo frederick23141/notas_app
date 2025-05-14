@@ -38,7 +38,8 @@ class NotesLocalDataSource {
           CREATE TABLE notes (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             title TEXT,
-            content TEXT
+            content TEXT,
+            date TEXT
           )
         ''');
       },

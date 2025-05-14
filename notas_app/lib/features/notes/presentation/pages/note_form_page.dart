@@ -55,6 +55,18 @@ class _NoteFormPageState extends State<NoteFormPage> {
           key: _formKey,
           child: Column(
             children: [
+              //mostar fecha
+              // Row(
+              //   children: [
+              //     Text(
+              //       widget.isEditMode ? 'Editar Nota' : 'Crear Nota',
+              //       style: TextStyle(
+              //         color: AppColors.backgroundAlt,
+              //         fontSize: 30,
+              //       ),
+              //     ),
+              //   ],
+              // ),
               const SizedBox(height: 10),
               TextFormField(
                 controller: _titleController,
@@ -88,6 +100,7 @@ class _NoteFormPageState extends State<NoteFormPage> {
                         id: widget.isEditMode ? widget.note?.id : null,
                         title: _titleController.text,
                         content: _contentController.text,
+                        date: DateTime.now(),
                       );
                       if (widget.isEditMode) {
                         //context.read<NoteBloc>().add(UpdateNote(note));
