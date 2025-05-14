@@ -29,11 +29,15 @@ class NotesListPage extends StatelessWidget {
           ),
         ],
       ),
+      // Cuerpo de la pantalla que muestra el estado de las notas
       body: BlocBuilder<NoteBloc, NoteState>(
         builder: (context, state) {
+          // Si las notas están en proceso de carga, mostrar un indicador de progreso
           if (state is NoteLoading) {
             return const Center(child: CircularProgressIndicator());
-          } else if (state is NoteLoaded) {
+          }
+          // Si las notas se han cargado correctamente, mostrar una lista de notas
+          else if (state is NoteLoaded) {
             return ListView.builder(
               itemCount: state.notes.length,
               itemBuilder: (context, index) {

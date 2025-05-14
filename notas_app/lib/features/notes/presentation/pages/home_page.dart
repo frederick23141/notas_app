@@ -17,22 +17,24 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    //capturamos el estado de auth
+    // Capturamos el estado de autenticación (AuthBloc)
     final authState = context.read<AuthBloc>().state;
     String? token;
     bool favorite = false;
-
+    // Si el usuario está autenticado, se extrae el token
     if (authState is Authenticated) {
       token = authState.user.token;
       print("Token en HomePage (notas): $token");
     }
     return BlocBuilder<NoteBloc, NoteState>(
       builder: (context, state) {
+        // Mostrar un indicador de carga mientras se cargan las notas
         if (state is NoteLoading) {
           return const Scaffold(
             body: Center(child: CircularProgressIndicator()),
           );
         } else if (state is NoteLoaded) {
+          // Si las notas se cargan correctamente, se muestran en una lista
           final notes = state.notes;
           return Scaffold(
             appBar: AppBar(
@@ -84,11 +86,12 @@ class HomePage extends StatelessWidget {
                     trailing: IconButton(
                       icon: const Icon(Icons.delete),
                       onPressed: () {
+                        // Eliminar una nota
                         context.read<NoteBloc>().add(DeleteNote(note.id!));
                       },
                     ),
                     onTap: () {
-                      // Agregar funcionalidad para editar nota
+                      // Navegar a la página de edición de notas
                       Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -103,6 +106,7 @@ class HomePage extends StatelessWidget {
             ),
             floatingActionButton: FloatingActionButton(
               onPressed: () {
+                // Navegar a la página de creación de notas
                 Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -114,9 +118,11 @@ class HomePage extends StatelessWidget {
             ),
           );
         } else if (state is NoteError) {
+          // Si hubo un error al cargar las notas
           return Scaffold(body: Center(child: Text(state.message)));
         } else {
           return const Scaffold(
+            // En caso de que el estado de las notas no esté definido
             body: Center(child: Text(AppTexts.errorLoadNotesBody)),
           );
         }
@@ -124,6 +130,11 @@ class HomePage extends StatelessWidget {
     );
   }
 
+  /// Muestra un cuadro de diálogo con el token de autenticación.
+  ///
+  /// **Parámetros**:
+  /// - `context`: El contexto en el cual se mostrará el cuadro de diálogo.
+  /// - `token`: El token de autenticación que se capturo si ya hay inicio de session
   void mostarToken(BuildContext context, String token) {
     showDialog(
       context: context,
