@@ -39,11 +39,12 @@ class NotesLocalDataSource {
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             title TEXT,
             content TEXT,
-            date TEXT
+            date TEXT,
+            dateupdate TEXT
           )
         ''');
       },
-      version: 1,
+      version: 2,
     );
   }
 
@@ -83,7 +84,7 @@ class NotesLocalDataSource {
   ///
   /// Parámetro:
   /// - [note]: La nota que se va a actualizar, debe ser una instancia de [NoteEntity].
-  Future<void> updateNote(NoteEntity note) async {
+  /*Future<void> updateNote(NoteEntity note) async {
     final db = await database;
     await db.update(
       'notes',
@@ -91,6 +92,22 @@ class NotesLocalDataSource {
       where: 'id = ?',
       whereArgs: [note.id],
     );
+  }
+  */
+  Future<void> updateNote(NoteEntity note) async {
+    final db = await database;
+
+    // Crear un mapa con los campos a actualizar, incluyendo 'dteupdate' con la fecha actual
+    final Map<String, dynamic> noteMap = {
+      'title': note.title,
+      'content': note.content,
+      'dateupdate':
+          DateTime.now()
+              .toIso8601String(), // Capturamos la fecha de actualización
+    };
+
+    // Realizamos la actualización con los campos que queremos cambiar
+    await db.update('notes', noteMap, where: 'id = ?', whereArgs: [note.id]);
   }
 
   /// Elimina una nota de la base de datos.

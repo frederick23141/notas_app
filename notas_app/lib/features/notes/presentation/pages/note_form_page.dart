@@ -56,17 +56,19 @@ class _NoteFormPageState extends State<NoteFormPage> {
           child: Column(
             children: [
               //mostar fecha
-              // Row(
-              //   children: [
-              //     Text(
-              //       widget.isEditMode ? 'Editar Nota' : 'Crear Nota',
-              //       style: TextStyle(
-              //         color: AppColors.backgroundAlt,
-              //         fontSize: 30,
-              //       ),
-              //     ),
-              //   ],
-              // ),
+              Row(
+                children: [
+                  Text(
+                    widget.isEditMode
+                        ? ' Ultima actualizacion :${widget.note?.dateupdate}'
+                        : 'Fecha Creacion : ${DateTime.now().toIso8601String()}',
+                    style: TextStyle(
+                      color: AppColors.textPrimary,
+                      fontSize: 12,
+                    ),
+                  ),
+                ],
+              ),
               const SizedBox(height: 10),
               TextFormField(
                 controller: _titleController,

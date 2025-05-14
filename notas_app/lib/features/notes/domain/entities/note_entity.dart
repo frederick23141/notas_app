@@ -16,6 +16,8 @@ class NoteEntity {
   /// Fecha de creacion de la nota
   final DateTime date;
 
+  final DateTime? dateupdate;
+
   /// Constructor de la entidad [NoteEntity].
   ///
   /// [id] es opcional, ya que una nueva nota puede no tener aún un ID asignado.
@@ -25,6 +27,7 @@ class NoteEntity {
     required this.title,
     required this.content,
     required this.date,
+    this.dateupdate,
   });
 
   /// Convierte la instancia de [NoteEntity] en un mapa de clave-valor ([Map<String, dynamic>]),
@@ -37,6 +40,7 @@ class NoteEntity {
       'title': title,
       'content': content,
       'date': date.toIso8601String(),
+      'dateupdate': dateupdate?.toIso8601String(),
     };
   }
 
@@ -51,6 +55,8 @@ class NoteEntity {
       title: map['title'],
       content: map['content'],
       date: DateTime.parse(map['date']),
+      dateupdate:
+          map['dateupdate'] != null ? DateTime.parse(map['dateupdate']) : null,
     );
   }
 }
