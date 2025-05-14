@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:notas_app/core/themes/app_themes.dart';
 
 import 'package:notas_app/features/auth/data/datasources/auth_local_datasource.dart';
 import 'package:notas_app/features/auth/data/datasources/repositories/auth_repository_impl.dart';
@@ -44,32 +45,38 @@ class MyApp extends StatelessWidget {
       deleteNote: usecase.DeleteNote(notesRepository),
     )..add(LoadNotes());
 
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider<AuthBloc>.value(value: authBloc),
-        BlocProvider<NoteBloc>.value(value: noteBloc),
-      ],
-      child: MaterialApp(
-        title: 'Notas App',
-        debugShowCheckedModeBanner: false,
-        routes: {
-          '/login': (_) => const LoginPage(),
-          '/home': (_) => const HomePage(),
-          '/notes': (_) => const NotesListPage(),
-          '/note-form': (_) => const NoteFormPage(isEditMode: false),
-        },
-        home: BlocBuilder<AuthBloc, AuthState>(
-          builder: (context, state) {
-            if (state is AuthLoading) {
-              return const Scaffold(
-                body: Center(child: CircularProgressIndicator()),
-              );
-            } else if (state is Authenticated) {
-              return const HomePage();
-            } else {
-              return const LoginPage();
-            }
+    return Theme(
+      data: AppTheme.defaultTheme.copyWith(
+        inputDecorationTheme: AppTheme.defaultInputDecorationTheme,
+      ),
+      child: MultiBlocProvider(
+        providers: [
+          BlocProvider<AuthBloc>.value(value: authBloc),
+          BlocProvider<NoteBloc>.value(value: noteBloc),
+        ],
+        child: MaterialApp(
+          title: 'Notas App',
+          debugShowCheckedModeBanner: false,
+          theme: AppTheme.defaultTheme,
+          routes: {
+            '/login': (_) => const LoginPage(),
+            '/home': (_) => const HomePage(),
+            '/notes': (_) => const NotesListPage(),
+            '/note-form': (_) => const NoteFormPage(isEditMode: false),
           },
+          home: BlocBuilder<AuthBloc, AuthState>(
+            builder: (context, state) {
+              if (state is AuthLoading) {
+                return const Scaffold(
+                  body: Center(child: CircularProgressIndicator()),
+                );
+              } else if (state is Authenticated) {
+                return const HomePage();
+              } else {
+                return const LoginPage();
+              }
+            },
+          ),
         ),
       ),
     );

@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:notas_app/core/constants/app_colors.dart';
 import 'package:notas_app/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:notas_app/features/auth/presentation/bloc/auth_event.dart';
+import 'package:notas_app/features/auth/presentation/bloc/auth_state.dart';
+import 'package:notas_app/features/notes/presentation/pages/note_form_page.dart';
 import '../bloc/note_bloc.dart';
 import '../bloc/note_event.dart';
 import '../bloc/note_state.dart';
@@ -12,6 +15,13 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    //capturamos el estado de auth
+    final authState = context.read<AuthBloc>().state;
+    String? token;
+    if (authState is Authenticated) {
+      token = authState.user.token;
+      print("Token en HomePage (notas): $token");
+    }
     return BlocBuilder<NoteBloc, NoteState>(
       builder: (context, state) {
         if (state is NoteLoading) {
@@ -19,21 +29,34 @@ class HomePage extends StatelessWidget {
             body: Center(child: CircularProgressIndicator()),
           );
         } else if (state is NoteLoaded) {
-          print("Notas cargadas: ${state.notes.length}");
           final notes = state.notes;
-
           return Scaffold(
             appBar: AppBar(
-              title: const Text("Notas"),
+              title: const Text(
+                "Notas",
+                style: TextStyle(fontSize: 30, color: AppColors.backgroundAlt),
+              ),
+
               actions: [
                 IconButton(
-                  icon: const Icon(Icons.logout),
+                  tooltip: token,
+                  icon: const Icon(Icons.remove_red_eye, size: 30),
+                  onPressed: () {
+                    //mostrar token
+                    mostarToken(context, token!);
+                  },
+                  color: AppColors.backgroundAlt,
+                ),
+                IconButton(
+                  icon: const Icon(Icons.logout, size: 30),
                   onPressed: () {
                     context.read<AuthBloc>().add(LogoutRequested());
                     Navigator.pushReplacementNamed(context, '/login');
                   },
+                  color: AppColors.backgroundAlt,
                 ),
               ],
+              backgroundColor: AppColors.buttonPrimary,
             ),
             body: SafeArea(
               child: ListView.builder(
@@ -51,6 +74,13 @@ class HomePage extends StatelessWidget {
                     ),
                     onTap: () {
                       // Agregar funcionalidad para editar nota
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder:
+                              (_) => NoteFormPage(isEditMode: true, note: note),
+                        ),
+                      );
                     },
                   );
                 },
@@ -58,7 +88,13 @@ class HomePage extends StatelessWidget {
             ),
             floatingActionButton: FloatingActionButton(
               onPressed: () {
-                _showAddNoteDialog(context);
+                // _showAddNoteDialog(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => NoteFormPage(isEditMode: false),
+                  ),
+                );
               },
               child: const Icon(Icons.add),
             ),
@@ -74,6 +110,26 @@ class HomePage extends StatelessWidget {
     );
   }
 
+  void mostarToken(BuildContext context, String token) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Token Generado'),
+          content: Row(children: [Text('${token}')]),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: const Text('Cancelar'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   // Método para mostrar un diálogo para agregar nota
   void _showAddNoteDialog(BuildContext context) {
     final titleController = TextEditingController();
@@ -84,18 +140,31 @@ class HomePage extends StatelessWidget {
       builder: (context) {
         return AlertDialog(
           title: const Text('Agregar Nota'),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              TextField(
-                controller: titleController,
-                decoration: const InputDecoration(labelText: 'Título'),
-              ),
-              TextField(
-                controller: contentController,
-                decoration: const InputDecoration(labelText: 'Contenido'),
-              ),
-            ],
+          content: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min, // Muy importante
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                TextField(
+                  controller: titleController,
+                  decoration: const InputDecoration(
+                    labelText: 'Título',
+                    //hintText: 'Título',
+                  ),
+                ),
+                const SizedBox(height: 50), // Este espacio ahora se aplicará
+                TextField(
+                  controller: contentController,
+                  decoration: const InputDecoration(
+                    labelText: 'Contenido',
+                    //hintText: 'Descripción',
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(12)),
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
           actions: [
             TextButton(

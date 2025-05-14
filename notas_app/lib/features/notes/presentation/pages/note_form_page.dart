@@ -1,6 +1,7 @@
 // lib/features/notes/presentation/pages/note_form_page.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:notas_app/core/constants/app_colors.dart';
 import 'package:notas_app/features/notes/presentation/bloc/note_bloc.dart';
 import 'package:notas_app/features/notes/presentation/bloc/note_event.dart';
 import 'package:notas_app/features/notes/domain/entities/note_entity.dart';
@@ -42,7 +43,11 @@ class _NoteFormPageState extends State<NoteFormPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.isEditMode ? 'Editar Nota' : 'Crear Nota'),
+        backgroundColor: AppColors.primary,
+        title: Text(
+          widget.isEditMode ? 'Editar Nota' : 'Crear Nota',
+          style: TextStyle(color: AppColors.backgroundAlt, fontSize: 30),
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -50,6 +55,7 @@ class _NoteFormPageState extends State<NoteFormPage> {
           key: _formKey,
           child: Column(
             children: [
+              const SizedBox(height: 10),
               TextFormField(
                 controller: _titleController,
                 decoration: const InputDecoration(labelText: 'Título'),
@@ -60,6 +66,7 @@ class _NoteFormPageState extends State<NoteFormPage> {
                   return null;
                 },
               ),
+              const SizedBox(height: 50),
               TextFormField(
                 controller: _contentController,
                 decoration: const InputDecoration(labelText: 'Contenido'),
@@ -71,24 +78,32 @@ class _NoteFormPageState extends State<NoteFormPage> {
                   return null;
                 },
               ),
-              const SizedBox(height: 16),
-              ElevatedButton(
-                onPressed: () {
-                  if (_formKey.currentState?.validate() ?? false) {
-                    final note = NoteEntity(
-                      id: widget.isEditMode ? widget.note?.id : null,
-                      title: _titleController.text,
-                      content: _contentController.text,
-                    );
-                    if (widget.isEditMode) {
-                      context.read<NoteBloc>().add(UpdateNote(note));
-                    } else {
-                      context.read<NoteBloc>().add(AddNote(note));
+              const SizedBox(height: 50),
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: () {
+                    if (_formKey.currentState?.validate() ?? false) {
+                      final note = NoteEntity(
+                        id: widget.isEditMode ? widget.note?.id : null,
+                        title: _titleController.text,
+                        content: _contentController.text,
+                      );
+                      if (widget.isEditMode) {
+                        //context.read<NoteBloc>().add(UpdateNote(note));
+                        setState(() {
+                          context.read<NoteBloc>().add(UpdateNote(note));
+                        });
+                      } else {
+                        setState(() {
+                          context.read<NoteBloc>().add(AddNote(note));
+                        });
+                      }
+                      Navigator.pop(context);
                     }
-                    Navigator.pop(context);
-                  }
-                },
-                child: Text(widget.isEditMode ? 'Actualizar' : 'Crear'),
+                  },
+                  child: Text(widget.isEditMode ? 'Actualizar' : 'Crear'),
+                ),
               ),
             ],
           ),

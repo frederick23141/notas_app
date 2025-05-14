@@ -2,9 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:notas_app/features/notes/presentation/bloc/note_bloc.dart';
-import 'package:notas_app/features/notes/presentation/bloc/note_event.dart';
 import 'package:notas_app/features/notes/presentation/bloc/note_state.dart';
-import 'package:notas_app/features/notes/domain/entities/note_entity.dart';
 import 'package:notas_app/features/notes/presentation/pages/note_form_page.dart';
 
 class NotesListPage extends StatelessWidget {
