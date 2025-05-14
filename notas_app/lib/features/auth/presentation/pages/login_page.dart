@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:notas_app/core/constants/app_texts.dart';
+import 'package:notas_app/core/routes/app_routes.dart';
 import 'package:notas_app/core/themes/app_themes.dart';
 import '../bloc/auth_bloc.dart';
 import '../bloc/auth_event.dart';
@@ -32,11 +34,12 @@ class _LoginPageState extends State<LoginPage> {
         inputDecorationTheme: AppTheme.defaultInputDecorationTheme,
       ),
       child: Scaffold(
-        appBar: AppBar(title: const Text("Iniciar sesión")),
+        appBar: AppBar(title: const Text(AppTexts.titleLogin)),
         body: BlocListener<AuthBloc, AuthState>(
           listener: (context, state) {
             if (state is Authenticated) {
-              Navigator.pushReplacementNamed(context, '/home');
+              Navigator.pushNamed(context, AppRoutes.home);
+              // Navigator.pushReplacementNamed(context, '/home');
             } else if (state is AuthError) {
               ScaffoldMessenger.of(
                 context,
@@ -103,16 +106,6 @@ class _LoginPageState extends State<LoginPage> {
                     },
                   ),
                   const SizedBox(height: 24),
-                  // ElevatedButton(
-                  //   onPressed: () {
-                  //     if (_formKey.currentState!.validate()) {
-                  //       context.read<AuthBloc>().add(
-                  //         LoginRequested(emailCtrl.text, passCtrl.text),
-                  //       );
-                  //     }
-                  //   },
-                  //   child: const Text("Ingresar"),
-                  // ),
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppColors.buttonPrimary,
@@ -129,7 +122,7 @@ class _LoginPageState extends State<LoginPage> {
                       }
                     },
                     child: const Text(
-                      'Iniciar sesión',
+                      AppTexts.btnTextLogin,
                       style: TextStyle(
                         color: AppColors.textOnPrimary,
                         fontSize: 16,

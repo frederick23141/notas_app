@@ -1,4 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:notas_app/core/constants/app_texts.dart';
 import 'package:notas_app/features/notes/domain/usecases/add_note.dart'
     as usecase;
 import 'package:notas_app/features/notes/domain/usecases/update_note.dart'
@@ -34,7 +35,7 @@ class NoteBloc extends Bloc<NoteEvent, NoteState> {
         final notes = await getNotes();
         emit(NoteLoaded(notes));
       } catch (e) {
-        emit(NoteError('Error al cargar notas'));
+        emit(NoteError(AppTexts.errorLoadNotes));
       }
     });
 
@@ -44,7 +45,7 @@ class NoteBloc extends Bloc<NoteEvent, NoteState> {
         final notes = await getNotes();
         emit(NoteLoaded(notes));
       } catch (e) {
-        emit(NoteError('Error al agregar nota'));
+        emit(NoteError(AppTexts.errorAddNote));
       }
     });
 
@@ -54,7 +55,7 @@ class NoteBloc extends Bloc<NoteEvent, NoteState> {
         final notes = await getNotes();
         emit(NoteLoaded(notes));
       } catch (e) {
-        emit(NoteError('Error al actualizar nota'));
+        emit(NoteError(AppTexts.errorUpdateNote));
       }
     });
 
@@ -64,7 +65,7 @@ class NoteBloc extends Bloc<NoteEvent, NoteState> {
         final notes = await getNotes();
         emit(NoteLoaded(notes));
       } catch (e) {
-        emit(NoteError('Error al eliminar nota'));
+        emit(NoteError(AppTexts.errorDeleteNote));
       }
     });
   }

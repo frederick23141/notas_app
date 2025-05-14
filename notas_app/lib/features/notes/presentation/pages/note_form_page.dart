@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:notas_app/core/constants/app_colors.dart';
+import 'package:notas_app/core/constants/app_texts.dart';
 import 'package:notas_app/features/notes/presentation/bloc/note_bloc.dart';
 import 'package:notas_app/features/notes/presentation/bloc/note_event.dart';
 import 'package:notas_app/features/notes/domain/entities/note_entity.dart';
@@ -45,7 +46,9 @@ class _NoteFormPageState extends State<NoteFormPage> {
       appBar: AppBar(
         backgroundColor: AppColors.primary,
         title: Text(
-          widget.isEditMode ? 'Editar Nota' : 'Crear Nota',
+          widget.isEditMode
+              ? AppTexts.titleUpdateNote
+              : AppTexts.titleCreateNote,
           style: TextStyle(color: AppColors.backgroundAlt, fontSize: 30),
         ),
       ),
@@ -60,8 +63,8 @@ class _NoteFormPageState extends State<NoteFormPage> {
                 children: [
                   Text(
                     widget.isEditMode
-                        ? ' Ultima actualizacion :${widget.note?.dateupdate}'
-                        : 'Fecha Creacion : ${DateTime.now().toIso8601String()}',
+                        ? ' ${AppTexts.dateUpdateText} :${widget.note?.dateupdate}'
+                        : '${AppTexts.dateCreateText} : ${DateTime.now().toIso8601String()}',
                     style: TextStyle(
                       color: AppColors.textPrimary,
                       fontSize: 12,
@@ -72,10 +75,12 @@ class _NoteFormPageState extends State<NoteFormPage> {
               const SizedBox(height: 10),
               TextFormField(
                 controller: _titleController,
-                decoration: const InputDecoration(labelText: 'Título'),
+                decoration: const InputDecoration(
+                  labelText: AppTexts.fieldTitleText,
+                ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Por favor, ingrese un título';
+                    return AppTexts.fieldNullTitleText;
                   }
                   return null;
                 },
@@ -83,11 +88,13 @@ class _NoteFormPageState extends State<NoteFormPage> {
               const SizedBox(height: 50),
               TextFormField(
                 controller: _contentController,
-                decoration: const InputDecoration(labelText: 'Contenido'),
+                decoration: const InputDecoration(
+                  labelText: AppTexts.fliedContenText,
+                ),
                 maxLines: 5,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Por favor, ingrese contenido';
+                    return AppTexts.fieldNullContentText;
                   }
                   return null;
                 },
@@ -117,7 +124,11 @@ class _NoteFormPageState extends State<NoteFormPage> {
                       Navigator.pop(context);
                     }
                   },
-                  child: Text(widget.isEditMode ? 'Actualizar' : 'Crear'),
+                  child: Text(
+                    widget.isEditMode
+                        ? AppTexts.btnUpdateText
+                        : AppTexts.btnCreateText,
+                  ),
                 ),
               ),
             ],

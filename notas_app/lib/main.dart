@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:notas_app/core/routes/app_routes.dart';
+import 'package:notas_app/core/routes/on_generate_route.dart';
 import 'package:notas_app/core/themes/app_themes.dart';
 
 import 'package:notas_app/features/auth/data/datasources/auth_local_datasource.dart';
@@ -64,6 +66,9 @@ class MyApp extends StatelessWidget {
             '/notes': (_) => const NotesListPage(),
             '/note-form': (_) => const NoteFormPage(isEditMode: false),
           },
+          //validarla ruta dinamica
+          onGenerateRoute: RouteGenerator.onGenerate,
+
           home: BlocBuilder<AuthBloc, AuthState>(
             builder: (context, state) {
               if (state is AuthLoading) {

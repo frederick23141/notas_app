@@ -1,4 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:notas_app/core/constants/app_texts.dart';
 import '../../domain/entities/user_entity.dart';
 import '../../domain/repositories/auth_repository.dart';
 import 'auth_event.dart';
@@ -45,7 +46,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         final user = await repository.getUser();
         emit(Authenticated(user!));
       } catch (e) {
-        emit(AuthError("Error al iniciar sesión"));
+        emit(AuthError(AppTexts.authError));
       }
     });
 

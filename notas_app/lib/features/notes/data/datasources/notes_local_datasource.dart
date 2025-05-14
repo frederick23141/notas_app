@@ -84,16 +84,7 @@ class NotesLocalDataSource {
   ///
   /// Parámetro:
   /// - [note]: La nota que se va a actualizar, debe ser una instancia de [NoteEntity].
-  /*Future<void> updateNote(NoteEntity note) async {
-    final db = await database;
-    await db.update(
-      'notes',
-      note.toMap(),
-      where: 'id = ?',
-      whereArgs: [note.id],
-    );
-  }
-  */
+
   Future<void> updateNote(NoteEntity note) async {
     final db = await database;
 

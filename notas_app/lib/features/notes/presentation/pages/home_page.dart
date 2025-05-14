@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:notas_app/core/constants/app_colors.dart';
+import 'package:notas_app/core/constants/app_texts.dart';
+import 'package:notas_app/core/routes/app_routes.dart';
 import 'package:notas_app/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:notas_app/features/auth/presentation/bloc/auth_event.dart';
 import 'package:notas_app/features/auth/presentation/bloc/auth_state.dart';
@@ -33,7 +35,7 @@ class HomePage extends StatelessWidget {
           return Scaffold(
             appBar: AppBar(
               title: const Text(
-                "Notas",
+                AppTexts.titlehome,
                 style: TextStyle(fontSize: 30, color: AppColors.backgroundAlt),
               ),
 
@@ -51,7 +53,8 @@ class HomePage extends StatelessWidget {
                   icon: const Icon(Icons.logout, size: 30),
                   onPressed: () {
                     context.read<AuthBloc>().add(LogoutRequested());
-                    Navigator.pushReplacementNamed(context, '/login');
+                    Navigator.pushNamed(context, AppRoutes.login);
+                    //Navigator.pushReplacementNamed(context, '/login');
                   },
                   color: AppColors.backgroundAlt,
                 ),
@@ -88,7 +91,6 @@ class HomePage extends StatelessWidget {
             ),
             floatingActionButton: FloatingActionButton(
               onPressed: () {
-                // _showAddNoteDialog(context);
                 Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -103,7 +105,7 @@ class HomePage extends StatelessWidget {
           return Scaffold(body: Center(child: Text(state.message)));
         } else {
           return const Scaffold(
-            body: Center(child: Text('No se encontraron notas')),
+            body: Center(child: Text(AppTexts.errorLoadNotesBody)),
           );
         }
       },
@@ -115,75 +117,14 @@ class HomePage extends StatelessWidget {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: const Text('Token Generado'),
+          title: const Text(AppTexts.titleToken),
           content: Row(children: [Text('${token}')]),
           actions: [
             TextButton(
               onPressed: () {
                 Navigator.pop(context);
               },
-              child: const Text('Cancelar'),
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  // Método para mostrar un diálogo para agregar nota
-  void _showAddNoteDialog(BuildContext context) {
-    final titleController = TextEditingController();
-    final contentController = TextEditingController();
-
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: const Text('Agregar Nota'),
-          content: SingleChildScrollView(
-            child: Column(
-              mainAxisSize: MainAxisSize.min, // Muy importante
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                TextField(
-                  controller: titleController,
-                  decoration: const InputDecoration(
-                    labelText: 'Título',
-                    //hintText: 'Título',
-                  ),
-                ),
-                const SizedBox(height: 50), // Este espacio ahora se aplicará
-                TextField(
-                  controller: contentController,
-                  decoration: const InputDecoration(
-                    labelText: 'Contenido',
-                    //hintText: 'Descripción',
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(12)),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                final note = NoteEntity(
-                  title: titleController.text,
-                  content: contentController.text,
-                  date: DateTime.now(),
-                );
-                context.read<NoteBloc>().add(AddNote(note));
-                Navigator.pop(context);
-              },
-              child: const Text('Guardar'),
-            ),
-            TextButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              child: const Text('Cancelar'),
+              child: const Text(AppTexts.btnTextCancel),
             ),
           ],
         );
