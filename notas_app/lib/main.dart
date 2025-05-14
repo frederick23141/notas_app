@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:notas_app/core/constants/app_texts.dart';
 import 'package:notas_app/core/routes/app_routes.dart';
 import 'package:notas_app/core/routes/on_generate_route.dart';
 import 'package:notas_app/core/themes/app_themes.dart';
@@ -57,7 +58,7 @@ class MyApp extends StatelessWidget {
           BlocProvider<NoteBloc>.value(value: noteBloc),
         ],
         child: MaterialApp(
-          title: 'Notas App',
+          title: AppTexts.nameApp,
           debugShowCheckedModeBanner: false,
           theme: AppTheme.defaultTheme,
           routes: {

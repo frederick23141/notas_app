@@ -1,12 +1,19 @@
 import 'package:flutter/cupertino.dart';
 
 class AppTexts {
+  //main
+  static const nameApp = 'Notas App';
   //auth_bloc
   static const authError = "Error al iniciar sesión";
 
   //LoginPage
   static const titleLogin = 'Iniciar sesión';
   static const btnTextLogin = 'Iniciar sesión';
+  //LoginPage textformfields
+  static const hintTextEmail = 'Email';
+  static const fieldNullEmail = 'Ingresa un email válido';
+  static const hintTextPassword = 'Contraseña';
+  static const fieldNullPassword = 'Mínimo 4 caracteres';
 
   //NoteBloc
   static const errorLoadNotes = 'Error al cargar notas';
@@ -33,4 +40,8 @@ class AppTexts {
   //note form buttosn
   static const btnUpdateText = 'Actualizar';
   static const btnCreateText = 'Crear';
+
+  //note list page
+  static const titlePage = 'Notas';
+  static const isNullNotes = 'No hay notas.';
 }

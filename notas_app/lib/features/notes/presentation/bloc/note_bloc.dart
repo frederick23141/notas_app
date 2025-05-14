@@ -13,11 +13,6 @@ import 'note_event.dart';
 import 'note_state.dart';
 
 class NoteBloc extends Bloc<NoteEvent, NoteState> {
-  /* final GetNotes getNotes;
-  final AddNote addNote;
-  final UpdateNote updateNote;
-  final DeleteNote deleteNote;
-*/
   final usecase.GetNotes getNotes;
   final usecase.AddNote addNote;
   final usecase.UpdateNote updateNote;

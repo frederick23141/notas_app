@@ -20,6 +20,8 @@ class HomePage extends StatelessWidget {
     //capturamos el estado de auth
     final authState = context.read<AuthBloc>().state;
     String? token;
+    bool favorite = false;
+
     if (authState is Authenticated) {
       token = authState.user.token;
       print("Token en HomePage (notas): $token");
@@ -67,6 +69,16 @@ class HomePage extends StatelessWidget {
                 itemBuilder: (context, index) {
                   final note = notes[index];
                   return ListTile(
+                    leading: CircleAvatar(
+                      child: IconButton(
+                        icon: Icon(Icons.favorite_rounded),
+                        color: AppColors.primary,
+                        onPressed: () {
+                          //agragar validacion de favorito o no
+                          favorite = !favorite;
+                        },
+                      ),
+                    ),
                     title: Text(note.title),
                     subtitle: Text(note.content),
                     trailing: IconButton(

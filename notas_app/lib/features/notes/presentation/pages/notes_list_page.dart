@@ -1,6 +1,8 @@
 // lib/features/notes/presentation/pages/notes_list_page.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:notas_app/core/constants/app_colors.dart';
+import 'package:notas_app/core/constants/app_texts.dart';
 import 'package:notas_app/features/notes/presentation/bloc/note_bloc.dart';
 import 'package:notas_app/features/notes/presentation/bloc/note_state.dart';
 import 'package:notas_app/features/notes/presentation/pages/note_form_page.dart';
@@ -12,7 +14,7 @@ class NotesListPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Notas'),
+        title: const Text(AppTexts.titlePage),
         actions: [
           IconButton(
             icon: const Icon(Icons.add),
@@ -57,7 +59,7 @@ class NotesListPage extends StatelessWidget {
           } else if (state is NoteError) {
             return Center(child: Text(state.message));
           } else {
-            return const Center(child: Text('No hay notas.'));
+            return const Center(child: Text(AppTexts.isNullNotes));
           }
         },
       ),

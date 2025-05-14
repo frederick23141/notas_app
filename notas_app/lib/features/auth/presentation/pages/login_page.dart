@@ -61,7 +61,7 @@ class _LoginPageState extends State<LoginPage> {
                     controller: emailCtrl,
                     decoration: InputDecoration(
                       prefixIcon: Icon(Icons.email_outlined),
-                      hintText: 'Email',
+                      hintText: AppTexts.hintTextEmail,
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.all(Radius.circular(12)),
                       ),
@@ -71,7 +71,7 @@ class _LoginPageState extends State<LoginPage> {
                       if (value == null ||
                           value.isEmpty ||
                           !value.contains('@')) {
-                        return "Ingresa un email válido";
+                        return AppTexts.fieldNullEmail;
                       }
                       return null;
                     },
@@ -91,7 +91,7 @@ class _LoginPageState extends State<LoginPage> {
                           icon: Icon(Icons.visibility_outlined),
                         ),
                       ),
-                      hintText: 'Contraseña',
+                      hintText: AppTexts.hintTextPassword,
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.all(Radius.circular(12)),
                       ),
@@ -100,7 +100,7 @@ class _LoginPageState extends State<LoginPage> {
                     obscureText: !isPasswordShown,
                     validator: (value) {
                       if (value == null || value.length < 4) {
-                        return "Mínimo 4 caracteres";
+                        return AppTexts.fieldNullPassword;
                       }
                       return null;
                     },
